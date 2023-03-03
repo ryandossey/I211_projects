@@ -1,0 +1,27 @@
+{%extends 'base.html' %}
+{%block title%} MEMBERS PAGE %endblock%
+
+{%block content%}
+
+<table class="table table-striped m-5">
+<tr>
+    <th>Name</th>
+    <th>DoB</th>
+    <th>Email</th>
+    <th>Address</th>
+    <th>Phone</th>
+</tr>
+{% for member in members %}
+<tr>
+    <td>{{trip['name'}}</td>
+    <td>{{trip['dob'}}</td>
+    <td>{{trip['email'}}</td>
+    <td>{{trip['address'}}</td>
+    <td>{{trip['phone'}}</td>
+</tr>
+
+
+{%endfor%}
+</table>
+
+{%endblock%}
