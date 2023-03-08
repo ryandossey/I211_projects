@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block title %} TRIPS PAGE {% endblock %}
+
+{% block content %}
+
+<table class="table table-striped mt-5">
+<tr>
+    <th><div class="col-md-2">Trip Name</div></th>
+    <th>Start Date</th>
+    <th>Trip Length</th>
+    <th>Location</th>
+    <th>Cost</th>
+    <th>Level</th>
+    <th>Leader</th>
+</tr>
+{% for trip in trips %}
+<tr>
+    <td><a href="{{ url_for('trip', trip_id = trips.index(trip)) }}">{{trip['name']}}</a></td>
+    <td>{{trip['start_date']}}</td>
+    <td>{{trip['length']}}</td>
+    <td>{{trip['location']}}</td>
+    <td>{{trip['cost']}}</td>
+    <td>{{trip['level']}}</td>
+    <td>{{trip['leader']}}</td>
+</tr>
+
+{% endfor %}
+
+</table>
+
+{% endblock %}

@@ -1,19 +1,26 @@
-from flask import Flask
+from flask import Flask, render_template, url_for
+import csv
 app = Flask(__name__)
+import os
 
+TRIP_PATH = app.root_path + '/trip_data.csv'
+MEMBER_PATH = app.root_path + '/member_data.csv'
 def get_trips():
-    with open(TRIPS_PATH, "r", encoding="utf-8-sig") as csvfile:
+    with open(TRIP_PATH, "r", encoding="utf-8-sig") as csvfile:
         data = csv.DictReader(csvfile, delimiter=",")
         trips = []
         for i in data:
             trips.append(dict(i))
+        return trips
+
 
 def get_members():
-    with open(MEMBERS_PATH, "r", encoding="utf-8-sig") as csvfile:
+    with open(MEMBER_PATH, "r", encoding="utf-8-sig") as csvfile:
         data = csv.DictReader(csvfile, delimiter=",")
         members = []
         for i in data:
             members.append(dict(i))
+        return members
 
 @app.route("/")
 def index():
@@ -21,21 +28,28 @@ def index():
 
 @app.route("/members")
 def members():
-    if os.path.isfile(MEMBERS_PATH):
-        members = get_members()
-    else:
-        create_members_csv()
-        members = get_members()
     members = get_members()
     return render_template('members.html', members=members)
 
 @app.route("/trips")
-def route():
-    if os.path.isfile(TRIPS_PATH):
-        trips = get_trips()
-    else:
-        create_members_csv()
-        members = get_members()
+def trips():
     trips = get_trips()
     return render_template('trips.html', trips=trips)
+
+@app.route('/trips/<trip_id>')
+def trip(trip_id=None):
+    print(trip_id, type(trip_id))
+    trip_id = int(trip_id)
+    trips = get_trips()
+    return render_template('trip.html', trip=(trips[trip_id]))
+
+# TODO convert input type from string to int
+# TODO /trips/0
+# TODO error checking, what happens when the user passes /trips/lol
+   
+#    if dino and dino in dinosaurs.keys():
+#       dinosaur = dinosaurs [dino]
+#       return render_template('tripid.html', trips=trips)
+#    else:
+#       return render_template('index.html')
 
