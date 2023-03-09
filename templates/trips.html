@@ -2,26 +2,26 @@
 {% block title %} TRIPS PAGE {% endblock %}
 
 {% block content %}
-
+<br> </br>
+<h1 class="mt-5"><strong>Outdoor Adventuring Company Trips</strong></h1>
+<!-- Title along with formating -->
 <table class="table table-striped mt-5">
 <tr>
-    <th><div class="col-md-2">Trip Name</div></th>
+    <th>Trip Name</div></th>
     <th>Start Date</th>
     <th>Trip Length</th>
     <th>Location</th>
     <th>Cost</th>
-    <th>Level</th>
-    <th>Leader</th>
 </tr>
+<!-- I created a for loop to loop through data from the member_data csv -->
 {% for trip in trips %}
 <tr>
+    <!-- I linked the correct trip to the trip_id allowing for the user to click on it to see more information -->
     <td><a href="{{ url_for('trip', trip_id = trips.index(trip)) }}">{{trip['name']}}</a></td>
     <td>{{trip['start_date']}}</td>
     <td>{{trip['length']}}</td>
     <td>{{trip['location']}}</td>
     <td>{{trip['cost']}}</td>
-    <td>{{trip['level']}}</td>
-    <td>{{trip['leader']}}</td>
 </tr>
 
 {% endfor %}

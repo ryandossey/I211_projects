@@ -6,14 +6,19 @@
 <br>
 <br>
 <br>
-<h1> {{trip['name']}}</h1>
-
-<p>Start Date: {{trip['start_date']}}</p>
-<p>Trip Length: {{trip['length']}}</p>
-<p>Location: {{trip['location']}}</p>
-<p>Cost: {{trip['cost']}}</p>
-<p>Activity Level: {{trip['level']}}</p>
-<p>Leader: {{trip['leader']}}</p>
-
+<br> </br>
+<h1 style="color:blue"> {{trip['name']}}</h1>
+<!-- Page title along with formating and color -->
+<br>
+<!-- I access the data being pulled from the trip_data csv and match it up with the correct trip -->
+<div class="text-md-start">
+    <p><strong>Start Date:</strong> {{trip['start_date']}}</p>
+    <p><strong>Length:</strong>  {{trip['length']}}</p>
+    <p><strong>Location:</strong> {{trip['location']}}</p>
+    <p><strong>Cost:</strong> {{trip['cost']}}</p>
+    <p><strong>Activity Level:</strong> {{trip['level']}}</p>
+    <p><strong>Leader:</strong> {{trip['leader']}}</p>
+    <p><strong>Description:</strong> {{trip['description']}}</p>
+    </div>
 
 {% endblock %}

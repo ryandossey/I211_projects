@@ -2,8 +2,10 @@
 {% block title %} MEMBERS PAGE {% endblock %}
 
 {% block content %}
-
-<table class="table table-striped m-5">
+<br> </br>
+<h1 class="mt-5"><strong>Outdoor Adventuring Club Members</strong></h1>
+<!-- Table headers -->
+<table class="table table-striped mt-5">
 <tr>
     <th>Name</th>
     <th>DoB</th>
@@ -11,6 +13,7 @@
     <th>Address</th>
     <th>Phone</th>
 </tr>
+<!-- I created a for loop to loop through data from the member_data csv -->
 {% for member in members %}
 <tr>
     <td>{{member['name']}}</td>

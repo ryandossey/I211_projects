@@ -2,15 +2,18 @@
 {% block title %} INDEX PAGE {% endblock %}
 
 {% block content %}
-    <div class="container">
-        <h1>&nbsp;&nbsp;&nbsp;&nbsp;</h1>
+    <div class="px-4 py-5 my-5 text-center">
+
+        <br> </br>
+<!-- Inserting the image with formating -->
         <img class="rounded mx-auto d-block" src="{{url_for('static', filename='images/mountains.jpeg')}}" alt="mountains" width="450" height="350">
         <div class="text center">
         <h1 class="mt-5"><strong>Outdoor Adventures</strong></h1>
         <p>Connecting you to the great outdoors since 1970</p>
-        <p><a class="nav-link" href="{{url_for('trips')}}"><button type="button" class="btn btn-primary">See Trips!</button></a><a class="nav-link" href="{{url_for('members')}}"><button type="button" class="btn btn-primary">See Members!</button></a></p>
-        </div>
-
+        <!-- Both the trips and members buttons with the corresponding link -->
+        <a class="nav-link" href="{{url_for('trips')}}"><button type="button" class="btn btn-primary mb-3">See Trips!</button></a>
+        <a class="nav-link" href="{{url_for('members')}}"><button type="button" class="btn btn-primary">See Members!</button></a>
+        
     </div>
 
 
