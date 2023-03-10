@@ -1,5 +1,6 @@
 from flask import Flask, render_template, url_for
 import csv
+from datetime import datetime 
 app = Flask(__name__)
 import os
 
@@ -16,6 +17,9 @@ def get_trips():
         # I then read the content of the data into a dictionary
         for i in data:
             trips.append(dict(i))
+        # trips.sort(key=itemgetter("start_date"()))
+        trips=sorted(trips, key=lambda dict:datetime.strptime(dict['start_date'], '%m/%d/%y'))
+# I  then sorted the trips oldest to youngest
             # I create a for loop to read in all of the data
         return trips
         # I then return the newly created dictionary of the trips
@@ -29,6 +33,8 @@ def get_members():
         # I then read the content of the data into a dictionary
         for i in data:
             members.append(dict(i))
+        members=sorted(members, key=lambda dict:datetime.strptime(dict['DoB'], '%m/%d/%y'))
+        # I  then sorted the members oldest to youngest
             # I create a for loop to read in all of the data
         return members
          # I then return the newly created dictionary of the trips
@@ -67,10 +73,5 @@ def trip(trip_id=None):
     return render_template('trip.html', trip=(trips[trip_id]))
     # I then create the template linking the trip_id to each trip
 
-
-
-# TODO convert input type from string to int
-# TODO /trips/0
-# TODO error checking, what happens when the user passes /trips/lol
    
 
