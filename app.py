@@ -73,5 +73,22 @@ def trip(trip_id=None):
     return render_template('trip.html', trip=(trips[trip_id]))
     # I then create the template linking the trip_id to each trip
 
-   
+@app.route('/members/create')
+def members_create():
+    return render_template('member_form.html', members_create=members_create)
+
+@app.route('/members/add', methods=['GET', 'POST'])
+def add_members():
+    if request.method=='POST':
+        members = get_members()
+        new_members = {}
+        new_members['name'] = request.form['name']
+        new_members['DoB'] = request.form['DoB']
+        new_members['email'] = request.form['email']
+        new_members['address'] = request.form['address']
+        new_members['phone'] = request.form['phone']
+        new_members['level'] = request.form['level']
+        new_members['leader'] = request.form['leader']
+        new_members['description'] = request.form['description']
+    return render_template('members.html', members=members)
 
