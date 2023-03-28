@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for
+from flask import Flask, render_template, url_for, request, redirect
 import csv
 from datetime import datetime 
 app = Flask(__name__)
@@ -39,6 +39,37 @@ def get_members():
         return members
          # I then return the newly created dictionary of the trips
 
+
+    #  set members and trips
+
+def set_trips(trips):
+    try:
+        # I refrenced the write function used in assignment 6 to help me on creating this one
+        with open("trip_data.csv", "w") as csvfile:
+            # I first open the csv file read in earlier
+            csv_writer = csv.writer(csvfile, delimiter=",", quoting=csv.QUOTE_NONNUMERIC)
+            csv_writer.writerow(trips[0].keys())
+            # csv.DictWriter (look it up, for the bonus problem too)
+
+            # I create a for loop that sets the correct number read in to what is produced when written out
+            for i in range(len(trips)):
+                csv_writer.writerow(trips[i].values())
+    except IOError:
+        print("no such file or directory")
+
+def set_members(members):
+    # I took the same steps as above writing this file
+    # I refrenced the write function used in assignment 6 to help me on creating this one
+    try:
+        with open("member_data.csv", "w") as csvfile:
+            # I first open the csv file read in earlier
+            csv_writer = csv.writer(csvfile, delimiter=",", quoting=csv.QUOTE_NONNUMERIC)
+            csv_writer.writerow(trips[0].keys())
+            # I create a for loop that sets the correct number read in to what is produced when written out
+            for i in range(len(trips)):
+                csv_writer.writerow(members[i].values())
+    except IOError:
+        print("no such file or directory")
 
 # I create app routes for the corresponding web pages
 @app.route("/")
@@ -81,6 +112,7 @@ def members_create():
 def add_members():
     if request.method=='POST':
         members = get_members()
+        # change members to members_list
         new_members = {}
         new_members['name'] = request.form['name']
         new_members['DoB'] = request.form['DoB']
@@ -90,5 +122,15 @@ def add_members():
         new_members['level'] = request.form['level']
         new_members['leader'] = request.form['leader']
         new_members['description'] = request.form['description']
-    return render_template('members.html', members=members)
+
+        members.append(new_members)
+        set_members(members)
+
+        return redirect('/members', members=members)
+        # change the redirect function
+    else:
+        return render_template('members_form.html')
+
+        # variable and function both named members
+
 
