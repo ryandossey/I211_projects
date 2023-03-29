@@ -4,6 +4,9 @@ from datetime import datetime
 app = Flask(__name__)
 import os
 
+member_fieldname = ['name', 'DoB', 'email', 'address', 'phone', 'level', 'leader', 'description']
+# trips_fieldname = []
+
 TRIP_PATH = app.root_path + '/trip_data.csv'
 MEMBER_PATH = app.root_path + '/member_data.csv'
 # These two functions set up both my members and trip paths
@@ -33,7 +36,7 @@ def get_members():
         # I then read the content of the data into a dictionary
         for i in data:
             members.append(dict(i))
-        members=sorted(members, key=lambda dict:datetime.strptime(dict['DoB'], '%m/%d/%y'))
+        members=sorted(members, key=lambda dict:datetime.strptime(dict['DoB'], '%Y-%m-%d'))
         # I  then sorted the members oldest to youngest
             # I create a for loop to read in all of the data
         return members
@@ -63,11 +66,11 @@ def set_members(members):
     try:
         with open("member_data.csv", "w") as csvfile:
             # I first open the csv file read in earlier
-            csv_writer = csv.writer(csvfile, delimiter=",", quoting=csv.QUOTE_NONNUMERIC)
-            csv_writer.writerow(trips[0].keys())
+            csv_writer = csv.DictWriter(csvfile, quoting=csv.QUOTE_NONNUMERIC, fieldnames=member_fieldname)
+            csv_writer.writeheader()
             # I create a for loop that sets the correct number read in to what is produced when written out
-            for i in range(len(trips)):
-                csv_writer.writerow(members[i].values())
+            for i in range(len(members)):
+                csv_writer.writerow(members[i])
     except IOError:
         print("no such file or directory")
 
@@ -104,32 +107,31 @@ def trip(trip_id=None):
     return render_template('trip.html', trip=(trips[trip_id]))
     # I then create the template linking the trip_id to each trip
 
-@app.route('/members/create')
-def members_create():
-    return render_template('member_form.html', members_create=members_create)
 
 @app.route('/members/add', methods=['GET', 'POST'])
 def add_members():
     if request.method=='POST':
         members = get_members()
+        print(members)
         # change members to members_list
         new_members = {}
         new_members['name'] = request.form['name']
         new_members['DoB'] = request.form['DoB']
+        # make sure date is valild
+        # date is formated Y/M/D
         new_members['email'] = request.form['email']
         new_members['address'] = request.form['address']
         new_members['phone'] = request.form['phone']
-        new_members['level'] = request.form['level']
-        new_members['leader'] = request.form['leader']
-        new_members['description'] = request.form['description']
+
+        print(new_members)
 
         members.append(new_members)
         set_members(members)
 
-        return redirect('/members', members=members)
-        # change the redirect function
+        return redirect(url_for('members'))
+       
     else:
-        return render_template('members_form.html')
+        return render_template('member_form.html')
 
         # variable and function both named members
 
