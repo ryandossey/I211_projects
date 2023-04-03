@@ -5,7 +5,7 @@ app = Flask(__name__)
 import os
 
 member_fieldname = ['name', 'DoB', 'email', 'address', 'phone', 'level', 'leader', 'description']
-# trips_fieldname = []
+trips_fieldname = ['name', 'start_date', 'length', 'cost', 'location', 'level', 'leader', 'description', 'ID']
 
 TRIP_PATH = app.root_path + '/trip_data.csv'
 MEMBER_PATH = app.root_path + '/member_data.csv'
@@ -21,7 +21,7 @@ def get_trips():
         for i in data:
             trips.append(dict(i))
         # trips.sort(key=itemgetter("start_date"()))
-        trips=sorted(trips, key=lambda dict:datetime.strptime(dict['start_date'], '%m/%d/%y'))
+        trips=sorted(trips, key=lambda dict:datetime.strptime(dict['start_date'], '%Y-%m-%d'))
 # I  then sorted the trips oldest to youngest
             # I create a for loop to read in all of the data
         return trips
@@ -50,7 +50,7 @@ def set_trips(trips):
         # I refrenced the write function used in assignment 6 to help me on creating this one
         with open("trip_data.csv", "w") as csvfile:
             # I first open the csv file read in earlier
-            csv_writer = csv.writer(csvfile, delimiter=",", quoting=csv.QUOTE_NONNUMERIC)
+            csv_writer = csv.writer(csvfile, delimiter=",", quoting=csv.QUOTE_NONNUMERIC, fieldnames=trips_fieldname)
             csv_writer.writerow(trips[0].keys())
             # csv.DictWriter (look it up, for the bonus problem too)
 
@@ -107,6 +107,14 @@ def trip(trip_id=None):
     return render_template('trip.html', trip=(trips[trip_id]))
     # I then create the template linking the trip_id to each trip
 
+    # # I set the trip_id to None
+    # trips = get_trips()
+    # trip = trips[int(trip_id)]
+    # # I then change the input variable to be an integer
+    # # I redefine the trips variable from above
+    # return render_template('trip.html', trip=trip)
+    # I then create the template linking the trip_id to each trip
+
 
 @app.route('/members/add', methods=['GET', 'POST'])
 def add_members():
@@ -134,5 +142,33 @@ def add_members():
         return render_template('member_form.html')
 
         # variable and function both named members
+
+
+@app.route('/trips/add', methods=['GET', 'POST'])
+def add_trips():
+
+    if request.method=='POST':
+        trips = get_trips()
+        print(trips)
+        # count = len(trips) +1
+        new_trips = {}
+        new_trips['name'] = request.form['name']
+        new_trips['location'] = request.form['location']
+        new_trips['length'] = request.form['length']
+        new_trips['level'] = request.form['level']
+        new_trips['start_date'] = request.form['start_date']
+        new_trips['cost'] = request.form['cost']
+        new_trips['leader'] = request.form['leader']
+        new_trips['description'] = request.form['description']
+        # new_trips['ID'] = count
+
+        trips.append(new_trips)
+        set_trips(trips)
+
+        return redirect(url_for('trips'))
+
+    else:
+        return render_template('trip_form.html')
+
 
 

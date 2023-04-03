@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% block title %} TRIPS FORM {% endblock %}
+
+{% block content %}
+<br>
+<br>
+
+<h1 class="mt-5"><strong>Add A New Trip!</strong></h1>
+
+
+<form name="add_trips" method="POST" class="text-center">
+    <div class="mb-3 col-auto">
+        <label for="name" class="form-label">Trip Name:</label>
+        <input type="text" class="form-control" id="name" name="name">
+      </div>
+
+    <div class="mb-3">
+      <label for="location" class="form-label">Trip Location:</label>
+      <input type="text" class="form-control" id="location" name="location">
+    </div>
+
+      <div class="mb-3">
+        <label for="birthdate">Start Date:</label>
+        <input type="date" id="length" name="length">
+    </div>
+
+    <div class="mb-3">
+      <legend>Trip Length: </legend>
+      <select name="length" id="length" class="form-label" aria-label="Default select example">
+        <option value="1 Day">1 Day</option>
+          <option value="3 Days">3 Days</option>
+          <option value="5 Days">5 Days</option>
+          <option value="7 Days">7 Days</option>
+          <option value="9 Days">9 Days</option>
+      </select>
+    </div>
+
+    <div class="mb-3">
+      <legend>Activity Level: </legend>
+      <select name="level" id="level" class="form-label" aria-label="Default select example">
+        <option value="Novice">Novice</option>
+          <option value="Intermediate">Intermediate</option>
+          <option value="Expert">Expert</option>
+      </select>
+    </div>
+
+      <div class="mb-3">
+        <label for="level" class="form-label">Activity Level:</label>
+        <input type="text" class="form-control" id="level" name="level">
+      </div>
+
+      <div class="mb-3">
+        <label for="cost" class="form-label">Cost:</label>
+        <input type="text" class="form-control" id="cost" name="cost">
+      </div>
+
+
+      <div class="mb-3">
+        <label for="leader" class="form-label">Trip Leader:</label>
+        <input type="text" class="form-control" id="leader" name="leader">
+      </div>
+
+      <div class="mb-3">
+        <label for="description" class="form-label">Description:</label>
+        <input type="text" class="form-control" id="description" name="description">
+      </div>
+      
+
+    
+    <!-- input type= date-input -->
+    <!-- https://www.w3schools.com/tags/att_input_type_date.asp -->
+
+<div class="text-right">
+  <button type="submit" value="Submit">Save</button>
+  <button type="reset" value="Reset">Reset</button>
+</div>
+
+</form>
+
+
+
+{% endblock %}
