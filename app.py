@@ -104,7 +104,7 @@ def trip(trip_id=None):
     # I then change the input variable to be an integer
     trips = get_trips()
     # I redefine the trips variable from above
-    return render_template('trip.html', trip=(trips[trip_id]))
+    return render_template('trip.html', trip_id=trip_id , trip=(trips[trip_id]))
     # I then create the template linking the trip_id to each trip
 
     # # I set the trip_id to None
@@ -171,4 +171,29 @@ def add_trips():
         return render_template('trip_form.html')
 
 
+@app.route('/trips/<trip_id>/edit')
+def edit_trip(trip_id=None):
+    trip_id = int(trip_id)
+    trips = get_trips()
 
+    if request.method=='POST':
+        new_trips = {}
+        new_trips['name'] = request.form['name']
+        new_trips['location'] = request.form['location']
+        new_trips['length'] = request.form['length']
+        new_trips['level'] = request.form['level']
+        new_trips['start_date'] = request.form['start_date']
+        new_trips['cost'] = request.form['cost']
+        new_trips['leader'] = request.form['leader']
+        new_trips['description'] = request.form['description']
+
+
+        trips.append(new_trips)
+        set_trips(trips)
+
+        return redirect(url_for('trips'))
+
+    else:
+        return render_template('trip_form.html', trip=(trips[trip_id]))
+
+# @app.route('/trips/<trip_id>/delete')
