@@ -9,14 +9,22 @@
 
 <br>
 
+{% if trip_id %}
+  {% set trip_name= trip['name'] %}
+  <h1>EDITTTT</h1>
+{% else %}
+  {% set trip_name= '' %}
+  <h1>ADDDDD</h1>
+
+{% endif %}
 <!-- need an if statement for adding/handling -->
 <!-- take a look at dino.site , add.dino and dino.quiz -->
 <!-- the action will be different for add/edit -->
-<form name="add_trips" action="{{url_for('add_trips')}}" method="POST" class="text-center">
+<form name="add_trips" method="POST" class="text-center">
     <div class="form-group row mb-3">
         <label for="name" class="col-sm-2">Trip Name:</label>
         <div class="col-sm-7">
-          <input type="text" class="form-control" id="name" name="name">
+          <input type="text" value="{{trip_name}}" class="form-control" id="name" name="name">
         </div>
       </div>
 

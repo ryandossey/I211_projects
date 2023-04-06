@@ -98,7 +98,6 @@ def trips():
 @app.route('/trips/<trip_id>')
 def trip(trip_id=None):
     # I set the trip_id to None
-    print(trip_id, type(trip_id))
     trip_id = int(trip_id)
     # I then change the input variable to be an integer
     trips = get_trips()
@@ -173,7 +172,7 @@ def add_trips():
 def edit_trip(trip_id=None):
     trip_id = int(trip_id)
     trips = get_trips()
-
+    print(trip_id,'!!!!!!!!!!!')
     if request.method=='POST':
         # questions for hours
         # would I use a get function? (becaue I need to pull data and then edit it)
@@ -196,7 +195,6 @@ def edit_trip(trip_id=None):
         return redirect(url_for('trips'))
 
     else:
-        request.method=='GET'
-        return render_template('trip_form.html', trip=(trips[trip_id]))
+        return render_template('trip_form.html', trip_id=trip_id, trip=(trips[trip_id]))
 
 # @app.route('/trips/<trip_id>/delete')
