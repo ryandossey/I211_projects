@@ -50,13 +50,12 @@ def set_trips(trips):
         # I refrenced the write function used in assignment 6 to help me on creating this one
         with open("trip_data.csv", "w") as csvfile:
             # I first open the csv file read in earlier
-            csv_writer = csv.writer(csvfile, delimiter=",", quoting=csv.QUOTE_NONNUMERIC, fieldnames=trips_fieldname)
-            csv_writer.writerow(trips[0].keys())
+            csv_writer = csv.DictWriter(csvfile, quoting=csv.QUOTE_NONNUMERIC, fieldnames=trips_fieldname)
+            csv_writer.writeheader
             # csv.DictWriter (look it up, for the bonus problem too)
-
             # I create a for loop that sets the correct number read in to what is produced when written out
             for i in range(len(trips)):
-                csv_writer.writerow(trips[i].values())
+                csv_writer.writerow(trips[i])
     except IOError:
         print("no such file or directory")
 
@@ -146,7 +145,6 @@ def add_members():
 
 @app.route('/trips/add', methods=['GET', 'POST'])
 def add_trips():
-
     if request.method=='POST':
         trips = get_trips()
         print(trips)
@@ -171,12 +169,15 @@ def add_trips():
         return render_template('trip_form.html')
 
 
-@app.route('/trips/<trip_id>/edit')
+@app.route('/trips/<trip_id>/edit', methods=['GET', 'POST'])
 def edit_trip(trip_id=None):
     trip_id = int(trip_id)
     trips = get_trips()
 
     if request.method=='POST':
+        # questions for hours
+        # would I use a get function? (becaue I need to pull data and then edit it)
+        # how would i impliment that compared to what i have now
         new_trips = {}
         new_trips['name'] = request.form['name']
         new_trips['location'] = request.form['location']
@@ -187,13 +188,15 @@ def edit_trip(trip_id=None):
         new_trips['leader'] = request.form['leader']
         new_trips['description'] = request.form['description']
 
-
-        trips.append(new_trips)
+# append will duplicate data, i want to replace the value at index
+        trips.insert(new_trips)
+        # would it be an insert?
         set_trips(trips)
 
         return redirect(url_for('trips'))
 
     else:
+        request.method=='GET'
         return render_template('trip_form.html', trip=(trips[trip_id]))
 
 # @app.route('/trips/<trip_id>/delete')
