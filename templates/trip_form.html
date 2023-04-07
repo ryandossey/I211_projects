@@ -5,18 +5,26 @@
 <br>
 <br>
 
-<h1 class="mt-5"><strong>Add A New Trip!</strong></h1>
-
 <br>
 
 {% if trip_id %}
   {% set trip_name= trip['name'] %}
-  <h1>EDITTTT</h1>
+  {% set trip_location= trip['location'] %}
+  {% set trip_date= trip['start_date'] %}
+  {% set trip_length= trip['length'] %}
+  {% set trip_level= trip['level'] %}
+  {% set trip_cost= trip['cost'] %}
+  {% set trip_leader= trip['leader'] %}
+  {% set trip_description= trip['description'] %}
+
+  <h1>Edit Trip: {{trip['name']}}</h1>
+
 {% else %}
   {% set trip_name= '' %}
-  <h1>ADDDDD</h1>
+  <h1>Add A New Trip!</h1>
 
 {% endif %}
+
 <!-- need an if statement for adding/handling -->
 <!-- take a look at dino.site , add.dino and dino.quiz -->
 <!-- the action will be different for add/edit -->
@@ -31,46 +39,36 @@
     <div class="form-group row mb-3">
       <label for="location" class="col-sm-2">Trip Location:</label>
       <div class="col-sm-7">
-        <input type="text" class="form-control" id="location" name="location">
+        <input type="text" value="{{trip_location}}" class="form-control" id="location" name="location">
       </div>
     </div>
 
       <div class="form-group row mb-3">
         <label for="birthdate" class="col-sm-2">Start Date:</label>
         <div class="col-sm-7">
-          <input type="date" id="start_date" name="start_date">
+          <input type="date" value="{{trip_date}}" id="start_date" name="start_date">
         </div>
     </div>
 
     <div class="form-group row mb-3">
-      <label for="tripl" class="col-sm-2">Trip Length:</label>
+      <label for="birthdate" class="col-sm-2">Trip Length:</label>
       <div class="col-sm-7">
-        <select name="length" id="length" class="form-label" aria-label="Default select example">
-          <option value="1 Day">1 Day</option>
-            <option value="3 Days">3 Days</option>
-            <option value="5 Days">5 Days</option>
-            <option value="7 Days">7 Days</option>
-            <option value="9 Days">9 Days</option>
-        </select>
+        <input type="text" value="{{trip_length}}" class="form-control" id="length" name="length">
       </div>
-    </div>
+  </div>
 
-    <div class="form-group row mb-3">
-      <label for="activl" class="col-sm-2">Activity Level:</label>
-      <div class="col-sm-7">
-        <select name="level" id="level" class="form-label" aria-label="Default select example">
-          <option value="Novice">Novice</option>
-            <option value="Intermediate">Intermediate</option>
-            <option value="Expert">Expert</option>
-        </select>
-      </div>
+  <div class="form-group row mb-3">
+    <label for="birthdate" class="col-sm-2">Activity Level:</label>
+    <div class="col-sm-7">
+      <input type="text" value="{{trip_level}}" class="form-control" id="level" name="level">
     </div>
+</div>
 
 
     <div class="form-group row mb-3">
       <label for="cost" class="col-sm-2">Cost:</label>
       <div class="col-sm-7">
-        <input type="text" class="form-control" id="cost" name="cost">
+        <input type="text" value="{{trip_cost}}" class="form-control" id="cost" name="cost" placeholder="$">
       </div>
     </div>
 
@@ -78,14 +76,14 @@
       <div class="form-group row mb-3">
         <label for="leader" class="col-sm-2">Trip Leader:</label>
         <div class="col-sm-7">
-          <input type="text" class="form-control" id="leader" name="leader">
+          <input type="text" value="{{trip_leader}}" class="form-control" id="leader" name="leader">
         </div>
       </div>
 
       <div class="form-group row mb-3">
         <label for="description" class="col-sm-2">Description:</label>
         <div class="col-sm-7">
-          <input type="text" class="form-control" id="description" name="description">
+          <input type="text" value="{{trip_description}}" class="form-control" id="description" name="description">
         </div>
       </div>
       

@@ -5,7 +5,7 @@ app = Flask(__name__)
 import os
 
 member_fieldname = ['name', 'DoB', 'email', 'address', 'phone', 'level', 'leader', 'description']
-trips_fieldname = ['name', 'start_date', 'length', 'cost', 'location', 'level', 'leader', 'description', 'ID']
+trips_fieldname = ['name', 'start_date', 'length', 'cost', 'location', 'level', 'leader', 'description']
 
 TRIP_PATH = app.root_path + '/trip_data.csv'
 MEMBER_PATH = app.root_path + '/member_data.csv'
@@ -51,11 +51,13 @@ def set_trips(trips):
         with open("trip_data.csv", "w") as csvfile:
             # I first open the csv file read in earlier
             csv_writer = csv.DictWriter(csvfile, quoting=csv.QUOTE_NONNUMERIC, fieldnames=trips_fieldname)
-            csv_writer.writeheader
+            csv_writer.writeheader()
             # csv.DictWriter (look it up, for the bonus problem too)
             # I create a for loop that sets the correct number read in to what is produced when written out
-            for i in range(len(trips)):
-                csv_writer.writerow(trips[i])
+            # for i in range(len(trips)):
+            #     csv_writer.writerow(trips[i])
+            for trip in trips:
+                csv_writer.writerow(trip)
     except IOError:
         print("no such file or directory")
 
@@ -105,22 +107,17 @@ def trip(trip_id=None):
     return render_template('trip.html', trip_id=trip_id , trip=(trips[trip_id]))
     # I then create the template linking the trip_id to each trip
 
-    # # I set the trip_id to None
-    # trips = get_trips()
-    # trip = trips[int(trip_id)]
-    # # I then change the input variable to be an integer
-    # # I redefine the trips variable from above
-    # return render_template('trip.html', trip=trip)
-    # I then create the template linking the trip_id to each trip
-
-
+# create a new route for members add
 @app.route('/members/add', methods=['GET', 'POST'])
 def add_members():
     if request.method=='POST':
+        # once the request is posted
+        # fill the forum with requested keys
         members = get_members()
         print(members)
-        # change members to members_list
+        # create a new dictionary
         new_members = {}
+        # fill the forum with requested keys
         new_members['name'] = request.form['name']
         new_members['DoB'] = request.form['DoB']
         # make sure date is valild
@@ -130,25 +127,29 @@ def add_members():
         new_members['phone'] = request.form['phone']
 
         print(new_members)
+        # append the new members to the members list
+        # set the members to be members
 
         members.append(new_members)
         set_members(members)
+        # take the user back to the members page after a sucessful completion
 
         return redirect(url_for('members'))
-       
+    #    if not completed, return them back to the form
     else:
         return render_template('member_form.html')
 
-        # variable and function both named members
 
-
+# create a new route for trips add
 @app.route('/trips/add', methods=['GET', 'POST'])
 def add_trips():
     if request.method=='POST':
+        # make sure the request is post
         trips = get_trips()
         print(trips)
-        # count = len(trips) +1
         new_trips = {}
+        # create a new dictionary
+        # request a set of keys
         new_trips['name'] = request.form['name']
         new_trips['location'] = request.form['location']
         new_trips['length'] = request.form['length']
@@ -157,26 +158,30 @@ def add_trips():
         new_trips['cost'] = request.form['cost']
         new_trips['leader'] = request.form['leader']
         new_trips['description'] = request.form['description']
-        # new_trips['ID'] = count
+
 
         trips.append(new_trips)
         set_trips(trips)
+        # then append new trips to trips
+        # and set trips to be trips
 
         return redirect(url_for('trips'))
+        # return the user back to trips after sucessful completion
+        # else, return them back to the form
 
     else:
         return render_template('trip_form.html')
 
-
+# create a route to allow members to edit their trips
 @app.route('/trips/<trip_id>/edit', methods=['GET', 'POST'])
 def edit_trip(trip_id=None):
-    trip_id = int(trip_id)
     trips = get_trips()
-    print(trip_id,'!!!!!!!!!!!')
+    trip_id = int(trip_id)
+    # set trip id = to the integer of the trip, allowing my count function to work
     if request.method=='POST':
-        # questions for hours
-        # would I use a get function? (becaue I need to pull data and then edit it)
-        # how would i impliment that compared to what i have now
+        # post the request method
+        # set up a new dictionary to store values
+        # request the keys after posting
         new_trips = {}
         new_trips['name'] = request.form['name']
         new_trips['location'] = request.form['location']
@@ -187,12 +192,15 @@ def edit_trip(trip_id=None):
         new_trips['leader'] = request.form['leader']
         new_trips['description'] = request.form['description']
 
-# append will duplicate data, i want to replace the value at index
-        trips.insert(new_trips)
-        # would it be an insert?
+        trips[int(trip_id)] = new_trips
         set_trips(trips)
+        # set the specific trip edited to overide the previous data in new_trips
+        # set trips equal to trips
+
 
         return redirect(url_for('trips'))
+        # return the user to trips
+        # else: return the user to the specific trip they were on
 
     else:
         return render_template('trip_form.html', trip_id=trip_id, trip=(trips[trip_id]))
