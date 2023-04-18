@@ -37,7 +37,7 @@ def get_trips():
 
 def get_trip(trip_id):
     '''Takes a trip_id, returns a single dictionary containing the data for the trip with that id'''
-    sql = "select * from trip where id = %s"
+    sql = "select * from trip where trip_id = %s"
     conn = get_connection()
     with conn:
         with conn.cursor() as cursor:
@@ -101,7 +101,7 @@ def edit_member(member_id, name, DoB, email, address, phone):
 def delete_member(member_id):
     '''sql =" delete from member where id = %s"
     Takes a member_id and deletes the member with that member_id from the member table'''
-    sql = "delete from member where id = %s"
+    sql = "delete from member where member_id = %s"
     conn = get_connection()
     with conn:
         with conn.cursor() as cursor:
@@ -146,10 +146,10 @@ if __name__ == '__main__':
         print(f'All trips: {get_trips()}')
         print(f'Trip info for trip_id 1: {get_trip(1)}')
     
-        add_trip("A Day in Yellowwood", "beginner", "2023-04-22", "Yellowwood State Forest", 1, "Sy Hikist", 10, "A day of hiking in Yellowwood. Bring a water bottle" )
-        print(f'All Members: {get_members()}')
-        add_member("Tom", "Sawyer","101 E Sam Clemons Dr Bloomington, IN","tsawyer@twain.com", "812-905-1865","1970-04-01")
-        print(f"All members attending the trip with trip_id 1: {get_attendees(1)}")
+        # add_trip("A Day in Yellowwood", "beginner", "2023-04-22", "Yellowwood State Forest", 1, "Sy Hikist", 10, "A day of hiking in Yellowwood. Bring a water bottle" )
+        # print(f'All Members: {get_members()}')
+        # add_member("Tom", "Sawyer","101 E Sam Clemons Dr Bloomington, IN","tsawyer@twain.com", "812-905-1865","1970-04-01")
+        # print(f"All members attending the trip with trip_id 1: {get_attendees(1)}")
         
     except Exception as e:
         print(e)

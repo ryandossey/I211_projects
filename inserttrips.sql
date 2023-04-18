@@ -9,7 +9,6 @@ CREATE TABLE trip (
     start_date DATE,
     location VARCHAR(20),
     length VARCHAR(15),
-    level VARCHAR(15),
     leader VARCHAR(15),
     cost DECIMAL,
     description TEXT
