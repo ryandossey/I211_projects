@@ -37,7 +37,7 @@ def get_trips():
 
 def get_trip(trip_id):
     '''Takes a trip_id, returns a single dictionary containing the data for the trip with that id'''
-    sql = "select * from trip where trip_id = %s"
+    sql = "select * from trip where trip_ID = %s"
     conn = get_connection()
     with conn:
         with conn.cursor() as cursor:
@@ -59,7 +59,7 @@ def add_trip(name, start_date, length, cost, location, level, leader, descriptio
 
 def update_trip(trip_id, name, start_date, length, cost, location, level, leader, description):
     '''Takes a trip_id and data for a trip. Updates the trip table with new data for the trip with trip_id as it's primary key'''
-    sql = "update trip set trip_id = %s, name = %s, start_date = %s, length = %s, cost = %s, location = %s, level = %s, leader = %s, description = %s"
+    sql = "update trip set trip_ID = %s, name = %s, start_date = %s, length = %s, cost = %s, location = %s, level = %s, leader = %s, description = %s"
     conn = get_connection()
     with conn:
         with conn.cursor() as cursor:
@@ -89,19 +89,18 @@ def get_members():
 
 def edit_member(member_id, name, DoB, email, address, phone):
     '''Given an member__id and member info, updates the data for the member with the given member_id in the member table'''
-    sql = "update member set member_id = %s, name = %s, DoB = %s, email = %s, address = %s, phone = %s "
+    sql = "update member set member_ID = %s, name = %s, DoB = %s, email = %s, address = %s, phone = %s "
     conn = get_connection()
     with conn:
         with conn.cursor() as cursor:
             cursor.execute(sql, (member_id, name, DoB, email, address, phone))
             return cursor.fetchone()
-    
 
 
 def delete_member(member_id):
     '''sql =" delete from member where id = %s"
     Takes a member_id and deletes the member with that member_id from the member table'''
-    sql = "delete from member where member_id = %s"
+    sql = "delete from member where member_ID = %s"
     conn = get_connection()
     with conn:
         with conn.cursor() as cursor:
@@ -123,7 +122,8 @@ def add_member_trip(trip_id, member_id):
 def remove_member_trip(trip_id, member_id):
     '''Takes as input a trip_id and a member_id and deletes the data in the database that indicates that the member with member_id as a primary key 
     is attending the trip with trip_id as a primary key.'''
-    sql = "delete from tripInfo (trip_ID, member_id) where id = %s"
+    sql = "delete from tripInfo where trip_ID = %s and member_ID = %s"
+    # Would i set it as trip_ID or member_ID (asking for both primary keys)
     conn = get_connection()
     with conn:
         with conn.cursor() as cursor:
@@ -133,7 +133,7 @@ def remove_member_trip(trip_id, member_id):
     
 def get_attendees(trip_id):
     '''Takes a trip_id and returns a list of dictionaries representing all of the members attending the trip with trip_id as its primary key'''
-    sql = "select * from members where memberID in (select memberID from tripInfo where tripID = %s)"
+    sql = "select * from members where member_ID in (select member_ID from tripInfo where trip_ID = %s)"
     conn = get_connection()
     with conn:
         with conn.cursor() as cursor:
