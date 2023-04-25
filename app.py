@@ -3,9 +3,19 @@ import csv
 from datetime import datetime 
 app = Flask(__name__)
 import os
+from os.path import exists
+import html
 
 member_fieldname = ['name', 'DoB', 'email', 'address', 'phone', 'level', 'leader', 'description']
 trips_fieldname = ['name', 'start_date', 'length', 'cost', 'location', 'level', 'leader', 'description']
+
+app.config.from_pyfile(app.root_path + '/config_defaults.py')
+if exists(app.root_path + '/config.py'):
+    app.config.from_pyfile(app.root_path + '/config.py')
+import database
+# how to import database module?
+# Whats the next step from here?
+
 
 TRIP_PATH = app.root_path + '/trip_data.csv'
 MEMBER_PATH = app.root_path + '/member_data.csv'
@@ -85,27 +95,38 @@ def index():
 @app.route("/members")
 def members():
     # I created a new set of lists equal to the data which I read into get_members
-    members = get_members()
+    members = database.get_members()
+    # I updated my route to pull data from the database using this function
     return render_template('members.html', members=members)
         # I return the rendered template linked to members.html
 
 @app.route("/trips")
 def trips():
     # I created a new set of lists equal to the data which I read into get_trips
-    trips = get_trips()
+    trips = database.get_trips()
+    # I updated my trips to pull data from the database using this function
+
     return render_template('trips.html', trips=trips)
     # I return the rendered template linked to trips.html
     # column-sort
 
 @app.route('/trips/<trip_id>')
 def trip(trip_id=None):
-    # I set the trip_id to None
-    trip_id = int(trip_id)
-    # I then change the input variable to be an integer
-    trips = get_trips()
-    # I redefine the trips variable from above
-    return render_template('trip.html', trip_id=trip_id , trip=(trips[trip_id]))
-    # I then create the template linking the trip_id to each trip
+    if trip_id:
+#grab trip_id from route and convert to int so we can use it as an index
+        trip_id = int(trip_id)
+        trips=get_trips()
+        trip = trips[trip_id]
+        return render_template('trip.html', trip_id=trip_id, trip=trip)
+    else:
+        return redirect(url_for('list_trips'))
+    # # I set the trip_id to None
+    # # I then change the input variable to be an integer
+    # trips = database.get_trip(trip_id)
+    # # I redefine the trips variable from above
+    # return render_template('trip.html', trip_id=trip_id , trip=(trips[trip_id]))
+    # # I then create the template linking the trip_id to each trip
+    
 
 # create a new route for members add
 @app.route('/members/add', methods=['GET', 'POST'])
@@ -118,22 +139,30 @@ def add_members():
         # create a new dictionary
         new_members = {}
         # fill the forum with requested keys
-        new_members['name'] = request.form['name']
-        new_members['DoB'] = request.form['DoB']
+        name = html.escape(request.form['name'])
+        DoB = html.escape(request.form['DoB'])
         # make sure date is valild
         # date is formated Y/M/D
-        new_members['email'] = request.form['email']
-        new_members['address'] = request.form['address']
-        new_members['phone'] = request.form['phone']
+        email = html.escape(request.form['email'])
+        address = html.escape(request.form['address'])
+        phone = html.escape(request.form['phone'])
+        # I changed my requests to html.escape to better protect my website
 
-        print(new_members)
+        error = check_members(name, DoB, address, phone)
+        if error:
+            return render_template("member_form.html", error=error, name=name, DoB=DoB, address=address, phone=phone)
+        # I imlimented the error checking here to make sure the data being inserted is good
+
+        # print(new_members)
         # append the new members to the members list
         # set the members to be members
 
-        members.append(new_members)
-        set_members(members)
+        # members.append(new_members)
+        # set_members(members)
         # take the user back to the members page after a sucessful completion
 
+        database.add_member(name, DoB, email, address, phone)
+        # I then add the data inserted into the database
         return redirect(url_for('members'))
     #    if not completed, return them back to the form
     else:
@@ -150,20 +179,25 @@ def add_trips():
         new_trips = {}
         # create a new dictionary
         # request a set of keys
-        new_trips['name'] = request.form['name']
-        new_trips['location'] = request.form['location']
-        new_trips['length'] = request.form['length']
-        new_trips['level'] = request.form['level']
-        new_trips['start_date'] = request.form['start_date']
-        new_trips['cost'] = request.form['cost']
-        new_trips['leader'] = request.form['leader']
-        new_trips['description'] = request.form['description']
+        name = html.escape(request.form['name'])
+        location = html.escape(request.form['location'])
+        length = html.escape(request.form['length'])
+        level = html.escape(request.form['level'])
+        start_date = html.escape(request.form['start_date'])
+        cost = html.escape(request.form['cost'])
+        leader = html.escape(request.form['leader'])
+        description = html.escape(request.form['description'])
+        # I changed my requests to html.escape to better protect my website
 
 
-        trips.append(new_trips)
-        set_trips(trips)
+
+        # trips.append(new_trips)
+        # set_trips(trips)
         # then append new trips to trips
         # and set trips to be trips
+
+        database.add_trip(name, start_date, length, cost, location, level, leader, description)
+        # I then add the data inserted into the database
 
         return redirect(url_for('trips'))
         # return the user back to trips after sucessful completion
@@ -183,21 +217,23 @@ def edit_trip(trip_id=None):
         # set up a new dictionary to store values
         # request the keys after posting
         new_trips = {}
-        new_trips['name'] = request.form['name']
-        new_trips['location'] = request.form['location']
-        new_trips['length'] = request.form['length']
-        new_trips['level'] = request.form['level']
-        new_trips['start_date'] = request.form['start_date']
-        new_trips['cost'] = request.form['cost']
-        new_trips['leader'] = request.form['leader']
-        new_trips['description'] = request.form['description']
+        name = html.escape(request.form['name'])
+        location = html.escape(request.form['location'])
+        length = html.escape(request.form['length'])
+        level = html.escape(request.form['level'])
+        start_date = html.escape(request.form['start_date'])
+        cost = html.escape(request.form['cost'])
+        leader = html.escape(request.form['leader'])
+        description= html.escape(request.form['description'])
+        # I changed my requests to html.escape to better protect my website
+
 
         trips[int(trip_id)] = new_trips
-        set_trips(trips)
         # set the specific trip edited to overide the previous data in new_trips
         # set trips equal to trips
 
-
+        database.update_trip(trip_id,name, start_date, length, cost, location, level, leader, description)
+        # I then update my trip data in the database
         return redirect(url_for('trips'))
         # return the user to trips
         # else: return the user to the specific trip they were on
@@ -206,3 +242,29 @@ def edit_trip(trip_id=None):
         return render_template('trip_form.html', trip_id=trip_id, trip=(trips[trip_id]))
 
 # @app.route('/trips/<trip_id>/delete')
+# uncomment, functionality optional
+
+# I created this function to check if the members data being inserted were good
+def check_members(name, DoB, address, phone):
+    error = ""
+    msg=[]
+    if not name:
+        msg.append("Name is missing!")
+    if len(name) > 15:
+        msg.append("Name is too long!")
+    if not DoB:
+        msg.append("Date of Birth is missing!")
+    if len(DoB) > 15:
+        msg.append("Date of Birth is too long!")
+    if not address:
+        msg.append("Address is missing!")
+    if len(address) > 25:
+        msg.append("Address is too long!")
+    if not phone:
+        msg.append("Phone number is missing!")
+    if len(phone) > 25:
+        msg.append("Phone number is too long!")
+    if len(msg)> 0:
+        error= "\n".join(msg)
+    return error
+

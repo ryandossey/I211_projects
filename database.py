@@ -11,19 +11,19 @@ from app import app
 #Use the uncommented version to test and turn in your code.  
 #Comment out this version and then uncomment and use the second version below when you are importing 
 #this file into your app.py in your I211_project for Project 3.2
-def get_connection():
-    return pymysql.connect(host="db.luddy.indiana.edu",
-                           user="i211s23_rdossey",
-                           password="my+sql=i211s23_rdossey",
-                           database="i211s23_rdossey",
-                           cursorclass=pymysql.cursors.DictCursor)
-
 # def get_connection():
-#     return pymysql.connect(host=app.config['DB_HOST'],
-#                            user=app.config['DB_USER'],
-#                            password=app.config['DB_PASS'],
-#                            database=app.config['DB_DATABASE'],
+#     return pymysql.connect(host="db.luddy.indiana.edu",
+#                            user="i211s23_rdossey",
+#                            password="my+sql=i211s23_rdossey",
+#                            database="i211s23_rdossey",
 #                            cursorclass=pymysql.cursors.DictCursor)
+
+def get_connection():
+    return pymysql.connect(host=app.config['DB_HOST'],
+                           user=app.config['DB_USER'],
+                           password=app.config['DB_PASS'],
+                           database=app.config['DB_DATABASE'],
+                           cursorclass=pymysql.cursors.DictCursor)
 
 def get_trips():
     '''Returns a list of dictionaries representing all of the trips data'''
@@ -55,15 +55,13 @@ def add_trip(name, start_date, length, cost, location, level, leader, descriptio
         conn.commit()
         
 
-
-
-def update_trip(trip_id, name, start_date, length, cost, location, level, leader, description):
-    '''Takes a trip_id and data for a trip. Updates the trip table with new data for the trip with trip_id as it's primary key'''
-    sql = "update trip set trip_ID = %s, name = %s, start_date = %s, length = %s, cost = %s, location = %s, level = %s, leader = %s, description = %s"
+def update_trip( name, start_date, length, cost, location, level, leader, description,trip_id):
+    '''Takes a trip_ID and data for a trip. Updates the trip table with new data for the trip with trip_id as it's primary key'''
+    sql = "update trip set name = %s, start_date = %s, length = %s, cost = %s, location = %s, level = %s, leader = %s, description = %s where trip_ID = %s"
     conn = get_connection()
     with conn:
         with conn.cursor() as cursor:
-            cursor.execute(sql, (trip_id , name, start_date, length, cost, location, level, leader, description))
+            cursor.execute(sql, ( name, start_date, length, cost, location, level, leader, description,trip_id ))
             # Do I need brackets seperating trip_id with the rest?
         conn.commit()
 
@@ -79,7 +77,7 @@ def add_member(name, DoB, email, address, phone):
     
 def get_members():
     '''Returns a list of dictionaries representing all of the member data'''
-    sql = "select * from members order by name"
+    sql = "select * from member order by name"
     conn = get_connection()
     with conn:
         with conn.cursor() as cursor:

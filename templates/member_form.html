@@ -4,6 +4,9 @@
 {% block content %}
 <br>
 <br>
+{% if error %}
+<h4 style="color:red"> {{ error }}</h4>
+{% endif %}
 
 <h1 class="mt-5"><strong>Add A New Member!</strong></h1>
 
@@ -13,28 +16,28 @@
     <div class="form-group row mb-3">
         <label for="name" class="col-sm-2">Name:</label>
         <div class="col-sm-7">
-          <input type="text" class="form-control" id="name" name="name">
+          <input type="text" class="form-control" id="name" name="name" value="{{name}}">
         </div>
       </div>
 
     <div class="form-group row mb-3">
       <label for="address" class="col-sm-2">Address:</label>
       <div class="col-sm-5">
-        <input type="text" class="form-control" id="address" name="address">
+        <input type="text" class="form-control" id="address" name="address" value="{{address}}">
       </div> 
     </div>
 
     <div class="form-group row mb-3">
         <label for="email" class="col-sm-2">Email:</label>
         <div class="col-sm-5">
-          <input type="text" class="form-control" id="email" name="email">
+          <input type="email" class="form-control" id="email" name="email">
         </div>
       </div>
 
       <div class="form-group row mb-3">
         <label for="phone" class="col-sm-2">Phone:</label>
         <div class="col-sm-5">
-          <input type="text" class="form-control" id="phone" name="phone" placeholder="(123)456-7899">
+          <input type="text" class="form-control" id="phone" name="phone" placeholder="(123)456-7899" value="{{phone}}">
         </div>
       </div>
     <!-- input type= date-input -->
