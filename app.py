@@ -22,68 +22,68 @@ MEMBER_PATH = app.root_path + '/member_data.csv'
 # These two functions set up both my members and trip paths
 # I combine the app.root to the csv to create the path
 
-def get_trips():
-    with open(TRIP_PATH, "r", encoding="utf-8-sig") as csvfile:
-        # I used the open csv function used in assignment 5
-        data = csv.DictReader(csvfile, delimiter=",")
-        trips = []
-        # I then read the content of the data into a dictionary
-        for i in data:
-            trips.append(dict(i))
-        # trips.sort(key=itemgetter("start_date"()))
-        trips=sorted(trips, key=lambda dict:datetime.strptime(dict['start_date'], '%Y-%m-%d'))
-# I  then sorted the trips oldest to youngest
-            # I create a for loop to read in all of the data
-        return trips
-        # I then return the newly created dictionary of the trips
+# def get_trips():
+#     with open(TRIP_PATH, "r", encoding="utf-8-sig") as csvfile:
+#         # I used the open csv function used in assignment 5
+#         data = csv.DictReader(csvfile, delimiter=",")
+#         trips = []
+#         # I then read the content of the data into a dictionary
+#         for i in data:
+#             trips.append(dict(i))
+#         # trips.sort(key=itemgetter("start_date"()))
+#         trips=sorted(trips, key=lambda dict:datetime.strptime(dict['start_date'], '%Y-%m-%d'))
+# # I  then sorted the trips oldest to youngest
+#             # I create a for loop to read in all of the data
+#         return trips
+#         # I then return the newly created dictionary of the trips
 
 
-def get_members():
-    with open(MEMBER_PATH, "r", encoding="utf-8-sig") as csvfile:
-        # I used the open csv function used in assignment 5
-        data = csv.DictReader(csvfile, delimiter=",")
-        members = []
-        # I then read the content of the data into a dictionary
-        for i in data:
-            members.append(dict(i))
-        members=sorted(members, key=lambda dict:datetime.strptime(dict['DoB'], '%Y-%m-%d'))
-        # I  then sorted the members oldest to youngest
-            # I create a for loop to read in all of the data
-        return members
-         # I then return the newly created dictionary of the trips
+# def get_members():
+#     with open(MEMBER_PATH, "r", encoding="utf-8-sig") as csvfile:
+#         # I used the open csv function used in assignment 5
+#         data = csv.DictReader(csvfile, delimiter=",")
+#         members = []
+#         # I then read the content of the data into a dictionary
+#         for i in data:
+#             members.append(dict(i))
+#         members=sorted(members, key=lambda dict:datetime.strptime(dict['DoB'], '%Y-%m-%d'))
+#         # I  then sorted the members oldest to youngest
+#             # I create a for loop to read in all of the data
+#         return members
+#          # I then return the newly created dictionary of the trips
 
 
     #  set members and trips
 
-def set_trips(trips):
-    try:
-        # I refrenced the write function used in assignment 6 to help me on creating this one
-        with open("trip_data.csv", "w") as csvfile:
-            # I first open the csv file read in earlier
-            csv_writer = csv.DictWriter(csvfile, quoting=csv.QUOTE_NONNUMERIC, fieldnames=trips_fieldname)
-            csv_writer.writeheader()
-            # csv.DictWriter (look it up, for the bonus problem too)
-            # I create a for loop that sets the correct number read in to what is produced when written out
-            # for i in range(len(trips)):
-            #     csv_writer.writerow(trips[i])
-            for trip in trips:
-                csv_writer.writerow(trip)
-    except IOError:
-        print("no such file or directory")
+# def set_trips(trips):
+#     try:
+#         # I refrenced the write function used in assignment 6 to help me on creating this one
+#         with open("trip_data.csv", "w") as csvfile:
+#             # I first open the csv file read in earlier
+#             csv_writer = csv.DictWriter(csvfile, quoting=csv.QUOTE_NONNUMERIC, fieldnames=trips_fieldname)
+#             csv_writer.writeheader()
+#             # csv.DictWriter (look it up, for the bonus problem too)
+#             # I create a for loop that sets the correct number read in to what is produced when written out
+#             # for i in range(len(trips)):
+#             #     csv_writer.writerow(trips[i])
+#             for trip in trips:
+#                 csv_writer.writerow(trip)
+#     except IOError:
+#         print("no such file or directory")
 
-def set_members(members):
-    # I took the same steps as above writing this file
-    # I refrenced the write function used in assignment 6 to help me on creating this one
-    try:
-        with open("member_data.csv", "w") as csvfile:
-            # I first open the csv file read in earlier
-            csv_writer = csv.DictWriter(csvfile, quoting=csv.QUOTE_NONNUMERIC, fieldnames=member_fieldname)
-            csv_writer.writeheader()
-            # I create a for loop that sets the correct number read in to what is produced when written out
-            for i in range(len(members)):
-                csv_writer.writerow(members[i])
-    except IOError:
-        print("no such file or directory")
+# def set_members(members):
+#     # I took the same steps as above writing this file
+#     # I refrenced the write function used in assignment 6 to help me on creating this one
+#     try:
+#         with open("member_data.csv", "w") as csvfile:
+#             # I first open the csv file read in earlier
+#             csv_writer = csv.DictWriter(csvfile, quoting=csv.QUOTE_NONNUMERIC, fieldnames=member_fieldname)
+#             csv_writer.writeheader()
+#             # I create a for loop that sets the correct number read in to what is produced when written out
+#             for i in range(len(members)):
+#                 csv_writer.writerow(members[i])
+#     except IOError:
+#         print("no such file or directory")
 
 # I create app routes for the corresponding web pages
 @app.route("/")
@@ -115,9 +115,13 @@ def trip(trip_id=None):
     if trip_id:
 #grab trip_id from route and convert to int so we can use it as an index
         trip_id = int(trip_id)
-        trips=get_trips()
-        trip = trips[trip_id]
-        return render_template('trip.html', trip_id=trip_id, trip=trip)
+
+        trips=database.get_trips() #get_trips
+        trip = database.get_trip(trip_id) #get_trip
+        attendees=database.get_attendees(trip_id)
+        members=database.get_members()
+        # print(members,'!!!!!!!!!!!!!!')
+        return render_template('trip.html', trip_id=trip_id, trip=trip, attendees=attendees, members=members)
     else:
         return redirect(url_for('list_trips'))
     # # I set the trip_id to None
@@ -267,4 +271,22 @@ def check_members(name, DoB, address, phone):
     if len(msg)> 0:
         error= "\n".join(msg)
     return error
+
+@app.route('/trips/<trip_id>/attendees/add', methods=['GET', 'POST'])
+def add_attendees(trip_id):
+        if request.method=='POST':
+            member_id = html.escape(request.form['id'])
+
+            database.add_member_trip(trip_id ,member_id)
+
+            return redirect(url_for('trips/<trip_id>'))
+        else:
+            return redirect(url_for('trips/<trip_id>'))
+
+
+
+
+# @app.route('/trips/<trip_id>/attendees/<member_id>/delete')
+# def delete_attendees():
+
 

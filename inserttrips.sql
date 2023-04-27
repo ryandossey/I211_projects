@@ -54,6 +54,20 @@ INSERT INTO member (member_ID, name, DoB, email, address, phone) VALUES
 ("5", "Skylar Channing","1993-09-15","skylar@channing.com","2095 N College Indianpolis","(812)540-8034"),
 ("6", "Sophie Martinez","1995-04-23","sophie.martinez93@gmail.com","123 Main Street Bloomington","(812)357-9251");
 
+INSERT INTO tripInfo (member_ID, trip_ID) VALUES
+("1", "1"),
+("2", "1"),
+("3", "1"),
+("4", "1"),
+("1", "2"),
+("4", "2"),
+("6", "2"),
+("1", "3"),
+("2", "2"),
+("5", "2");
+
+
+
 DROP TABLE trip;
 
 DROP TABLE member;
