@@ -286,7 +286,15 @@ def add_attendees(trip_id):
 
 
 
-# @app.route('/trips/<trip_id>/attendees/<member_id>/delete')
-# def delete_attendees():
+@app.route('/trips/<trip_id>/attendees/<member_id>/delete')
+def delete_attendees(trip_id, member_id):
+        # member_id = request.form['attendees']
+        # delete=request.args.get('delete', None)
+
+        database.remove_member_trip(trip_id,member_id)
+
+        return redirect(url_for('trip', trip_id=trip_id))
+
+
 
 
