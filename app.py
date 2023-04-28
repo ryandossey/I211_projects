@@ -228,7 +228,7 @@ def edit_trip(trip_id=None):
         start_date = html.escape(request.form['start_date'])
         cost = html.escape(request.form['cost'])
         leader = html.escape(request.form['leader'])
-        description= html.escape(request.form['description'])
+        description= request.form['description']
         # I changed my requests to html.escape to better protect my website
 
 
@@ -275,11 +275,11 @@ def check_members(name, DoB, address, phone):
 @app.route('/trips/<trip_id>/attendees/add', methods=['GET', 'POST'])
 def add_attendees(trip_id):
         if request.method=='POST':
-            member_id = html.escape(request.form['id'])
+            member_id = request.form['attendees']
 
-            database.add_member_trip(trip_id ,member_id)
+            database.add_member_trip(trip_id,member_id)
 
-            return redirect(url_for('trips/<trip_id>'))
+            return redirect(url_for('trips'))
         else:
             return redirect(url_for('trips/<trip_id>'))
 
