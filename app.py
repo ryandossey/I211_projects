@@ -120,7 +120,6 @@ def trip(trip_id=None):
         trip = database.get_trip(trip_id) #get_trip
         attendees=database.get_attendees(trip_id)
         members=database.get_members()
-        # print(members,'!!!!!!!!!!!!!!')
         return render_template('trip.html', trip_id=trip_id, trip=trip, attendees=attendees, members=members)
     else:
         return redirect(url_for('list_trips'))
@@ -138,7 +137,7 @@ def add_members():
     if request.method=='POST':
         # once the request is posted
         # fill the forum with requested keys
-        members = get_members()
+        # members = get_members()
         print(members)
         # create a new dictionary
         new_members = {}
@@ -178,7 +177,7 @@ def add_members():
 def add_trips():
     if request.method=='POST':
         # make sure the request is post
-        trips = get_trips()
+        # trips = get_trips()
         print(trips)
         new_trips = {}
         # create a new dictionary
@@ -213,7 +212,7 @@ def add_trips():
 # create a route to allow members to edit their trips
 @app.route('/trips/<trip_id>/edit', methods=['GET', 'POST'])
 def edit_trip(trip_id=None):
-    trips = get_trips()
+    # trips = get_trips()
     trip_id = int(trip_id)
     # set trip id = to the integer of the trip, allowing my count function to work
     if request.method=='POST':
@@ -279,7 +278,7 @@ def add_attendees(trip_id):
 
             database.add_member_trip(trip_id,member_id)
 
-            return redirect(url_for('trips'))
+            return redirect(url_for('trip', trip_id=trip_id))
         else:
             return redirect(url_for('trips/<trip_id>'))
 

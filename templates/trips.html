@@ -17,7 +17,7 @@
 {% for trip in trips %}
 <tr>
     <!-- I linked the correct trip to the trip_id allowing for the user to click on it to see more information -->
-    <td><a href="{{ url_for('trip', trip_id = trips.index(trip)) }}">{{trip['name']}}</a></td>
+    <td><a href="{{ url_for('trip', trip_id = trips.index(trip)+1 ) }}">{{trip['name']}}</a></td>
     <td>{{trip['start_date']}}</td>
     <td>{{trip['length']}}</td>
     <td>{{trip['location']}}</td>

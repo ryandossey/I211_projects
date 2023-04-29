@@ -48,7 +48,6 @@
             <!-- <td><button type="submit"  value="Submit" class="btn btn-primary">Delete</button></td> -->
             <td><a href="{{ url_for('delete_attendees', trip_id=trip_id, member_id=member['member_ID'] ) }}" class="btn btn-danger btn-sm" role="button">Delete</a></td>
         </tr>
-        <form method="POST" action="{{url_for('delete_attendees', trip_id=trip_id, member_id=member_id)}}">
 
 {% endfor %}
 </table>
@@ -56,7 +55,7 @@
 <h1 style="color:blue">Add An Attendee</h1>
 
 <div class="text-center"></div>
-<form method="POST" action="{{url_for('add_attendees', trip_id=trip_id)}}">
+<form method="POST" action="{{url_for('add_attendees', trip_id=trip_id,)}}">
 <select name="attendees" id="attendees">
     {% for member in members %}
     <option value="{{member['member_ID']}}">{{member['name']}}</option>
