@@ -116,7 +116,7 @@ def trip(trip_id=None):
 #grab trip_id from route and convert to int so we can use it as an index
         trip_id = int(trip_id)
 
-        trips=database.get_trips() #get_trips
+        # trips=database.get_trips() #get_trips
         trip = database.get_trip(trip_id) #get_trip
         attendees=database.get_attendees(trip_id)
         members=database.get_members()
@@ -212,7 +212,7 @@ def add_trips():
 # create a route to allow members to edit their trips
 @app.route('/trips/<trip_id>/edit', methods=['GET', 'POST'])
 def edit_trip(trip_id=None):
-    # trips = get_trips()
+    trips = database.get_trips()
     trip_id = int(trip_id)
     # set trip id = to the integer of the trip, allowing my count function to work
     if request.method=='POST':
