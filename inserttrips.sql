@@ -45,6 +45,7 @@ INSERT INTO trip (trip_ID, name, start_date, length, cost, location, level, lead
 ("4","Colorado Ski Trip","2023-04-27","5 Days","850","Vail CO","Intermediate","Lucas Patel","A unique and exciting winter vacation experience, combining outdoor adventure with cozy accommodations and memorable après-ski activities.!"),
 ("5","White River Kayaking","2023-05-06","2 Days","100","Noblesville IN","Novice","Sophia Nguyen","Explore the natural beauty of their surroundings and enjoy a relaxing day on the water!"),
 ("6","Rock Climbing","2023-05-06","2 Days","100","Noblesville IN","Intermediate","Liam Stevenson","Scale cliffs and mountains with specialized equipment and test your strength, endurance, and problem-solving skills!");
+("0", "Scuba Steve's Reef Adventure","2023-03-10","7 Days","2000","Key Largo FL","Expert","Captain Jack","Explore coral reefs, shipwrecks, and other underwater environments that are not accessible to snorkelers or swimmers!");
 
 INSERT INTO member (member_ID, name, DoB, email, address, phone) VALUES
 ("1", "Jody Whatley ","1971-10-26","jdwhat@iu.edu","1585 S Rogers Bloomington","(812)325-8841"),
@@ -65,11 +66,3 @@ INSERT INTO tripInfo (member_ID, trip_ID) VALUES
 ("1", "3"),
 ("2", "2"),
 ("5", "2");
-
-
-
-DROP TABLE trip;
-
-DROP TABLE member;
-
-DROP TABLE tripInfo;

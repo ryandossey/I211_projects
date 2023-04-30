@@ -118,8 +118,10 @@ def trip(trip_id=None):
 
         # trips=database.get_trips() #get_trips
         trip = database.get_trip(trip_id) #get_trip
+        # I created the variable attendees and pulled get attendees by trip_id
         attendees=database.get_attendees(trip_id)
         members=database.get_members()
+        # I set attendees=attendees
         return render_template('trip.html', trip_id=trip_id, trip=trip, attendees=attendees, members=members)
     else:
         return redirect(url_for('list_trips'))
@@ -271,27 +273,29 @@ def check_members(name, DoB, address, phone):
         error= "\n".join(msg)
     return error
 
+# I created a new app route to add attendees
 @app.route('/trips/<trip_id>/attendees/add', methods=['GET', 'POST'])
 def add_attendees(trip_id):
         if request.method=='POST':
             member_id = request.form['attendees']
+            # member_id requests the attendees form set up earlier
 
             database.add_member_trip(trip_id,member_id)
-
+            # I then add the trip_id and member_id to into the third table of my database
+            # I then redirect back to the specific trip the user was on, trip/<trip_id>
             return redirect(url_for('trip', trip_id=trip_id))
         else:
             return redirect(url_for('trips/<trip_id>'))
 
 
 
-
+# I then create an app route to delete a attendee
 @app.route('/trips/<trip_id>/attendees/<member_id>/delete')
 def delete_attendees(trip_id, member_id):
-        # member_id = request.form['attendees']
-        # delete=request.args.get('delete', None)
 
+        # I refrence the database to remove the trip_id and member_id of the user
         database.remove_member_trip(trip_id,member_id)
-
+        # I then redirect back to the specific trip the user was on, trip/<trip_id>
         return redirect(url_for('trip', trip_id=trip_id))
 
 
